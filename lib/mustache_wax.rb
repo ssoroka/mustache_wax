@@ -6,32 +6,33 @@ class MustacheWax
     class Railtie < Rails::Railtie
       initializer 'mustache_wax.initialize' do |app|
         MustacheWax.generate_templates
+        
+        if Rails.env.development?
+          class MustacheWax::Middleware
+            def initialize(app)
+              @app=app
+              @newest = Time.now
+            end 
+     
+            def call(env)
+              mtimes = MustacheWax.template_files.map do |f|
+                File.mtime(f)
+              end 
+              
+              if (newest = mtimes.max) > @newest
+                MustacheWax.generate_templates
+                @newest = newest
+              end 
+     
+              @app.call(env)
+            end 
+          end 
+     
+          app.config.middleware.use MustacheWax::Middleware
+        end 
+        
       end 
     end
-    
-    if Rails.env.development?
-      class MustacheWax::Middleware
-        def initialize(app)
-          @app=app
-          @newest = Time.now
-        end 
-
-        def call(env)
-          mtimes = MustacheWax.template_files.map do |f|
-            File.mtime(f)
-          end 
-          
-          if (newest = mtimes.max) > @newest
-            MustacheWax.generate_templates
-            @newest = newest
-          end 
-
-          @app.call(env)
-        end 
-      end 
-
-      app.config.middleware.use MustacheWax::Middleware
-    end 
     
   end 
   
