@@ -8,11 +8,39 @@ class MustacheWax
         MustacheWax.generate_templates
       end 
     end
+    
+    if Rails.env.development?
+      class MustacheWax::Middleware
+        def initialize(app)
+          @app=app
+          @newest = Time.now
+        end 
+
+        def call(env)
+          mtimes = MustacheWax.template_files.map do |f|
+            File.mtime(f)
+          end 
+          
+          if (newest = mtimes.max) > @newest
+            MustacheWax.generate_templates
+            @newest = newest
+          end 
+
+          @app.call(env)
+        end 
+      end 
+
+      app.config.middleware.use MustacheWax::Middleware
+    end 
+    
+  end 
+  
+  def self.template_files
+    Dir[File.join(%w(app views), '**', '*.html.mustache')]
   end 
   
   def self.generate_templates
     templates = {}
-    template_files = Dir[File.join(%w(app views), '**', '*.html.mustache')]
     template_files.each do |template_file|
       template_name = template_file.gsub(/^.*app\/views\//, '').gsub(/\.html\.mustache$/, '')
       template = File.read(template_file)
