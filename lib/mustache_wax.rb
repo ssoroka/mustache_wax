@@ -8,11 +8,11 @@ class MustacheWax
       templates[template_name] = template
     }
 
-    template_script = %(var mustache_templates = #{templates.to_json};)
+    templates_json = ActiveSupport::JSON.encode(templates)
+    template_script = %(var mustache_templates = #{templates_json};)
 
     File.open('public/javascripts/mustache_templates.js', 'w') do |f|
       f.write template_script
     end
-    # puts "Wrote new public/javascripts/mustache_templates.js from #{template_files.size} template(s)"
   end
 end

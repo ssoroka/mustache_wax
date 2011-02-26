@@ -1,6 +1,44 @@
 = mustache_wax
 
-Description goes here.
+Automatically compiles *.html.mustache view files in app/views to /javascripts/mustache_templates.js
+
+== Installation with bundler
+
+In your Gemfile:
+
+    gem 'mustache_wax'
+
+in your application layout:
+
+    <%= javascript_include_tag 'mustache_templates' %>
+
+If you are using capistrano for deployment, in your deploy.rb, add: 
+
+    require 'mustache_wax/capistrano'
+
+This will automatically compile your .html.mustache files on deploy.
+
+If you are not using capistrano, you'll need to modify your deploy script to run:
+
+    rake mustache:generate_templates
+
+== Usage
+
+Anywhere in javascript, you can now use the mustache_templates variable to reference any template.
+
+If you have a mustache view file named app/views/users/user_profile.html.mustache, you can now reference it
+in javascript using:
+
+    mustache_templates['users/user_profile']
+
+eg:
+
+    // render the user object with the template
+    var html = Mustache.to_html(mustache_templates['users/user_profile'], user_object);
+
+== Compiling in development
+
+You can trigger this manually with "rake mustache:generate_templates", but that shouldn't be necessary. Rails 2 & 3 will automatically recompile the templates on server start (and with passenger, on file change)
 
 == Contributing to mustache_wax
  
@@ -8,9 +46,11 @@ Description goes here.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
 * Fork the project
 * Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+* write specs to describe the bug or feature. This is important so I don't break it in a future version unintentionally.
+* get specs passing
+* Commit with a message that explains _why_ the change was necessary, not just what was changed.
+* push and send me a pull request
+* Please do not to mess with the Rakefile, or version.
 
 == Copyright
 

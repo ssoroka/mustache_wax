@@ -15,8 +15,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "mustache_wax"
   gem.homepage = "http://github.com/ssoroka/mustache_wax"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Automatically compiles .html.mustache view files to /javascripts/mustache_templates.js}
+  gem.description = %Q{Automatically compiles *.html.mustache view files in app/views to /javascripts/mustache_templates.js}
   gem.email = "ssoroka78@gmail.com"
   gem.authors = ["Steven Soroka"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
