@@ -1,3 +1,5 @@
+load 'tasks/mustache_wax.rake' if defined?(Rake)
+
 class MustacheWax
   def self.generate_templates
     templates = {}
@@ -16,3 +18,6 @@ class MustacheWax
     end
   end
 end
+
+# call immediately! :)
+MustacheWax.generate_templates

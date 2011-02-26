@@ -8,9 +8,20 @@ In your Gemfile:
 
     gem 'mustache_wax'
 
+Then
+
+    $ bundle install
+
 in your application layout:
 
     <%= javascript_include_tag 'mustache_templates' %>
+
+If you are using Rails 3, it should automatically share the rake task 
+(as long as you're allowing bundler to require the gem, like above), 
+if you're using an older version of Rails, or don't want to require the gem in Gemfile, 
+then edit your Rakefile and add:
+
+    Dir["#{Gem.searcher.find('mustache_wax').full_gem_path}/lib/tasks/*.rake"].each { |ext| load ext }
 
 If you are using capistrano for deployment, in your deploy.rb, add: 
 
@@ -38,7 +49,8 @@ eg:
 
 == Compiling in development
 
-You can trigger this manually with "rake mustache:generate_templates", but that shouldn't be necessary. Rails 2 & 3 will automatically recompile the templates on server start (and with passenger, on file change)
+You can trigger this manually with "rake mustache:generate_templates", but that shouldn't be necessary. Rails 2 & 3 will automatically recompile the templates on server start.
+With passenger you'll need to touch tmp/restart.txt, or touch tmp/always_restart.txt to always restart on every request; it's slower, but perhaps useful if you're doing a lot of template changes.
 
 == Contributing to mustache_wax
  

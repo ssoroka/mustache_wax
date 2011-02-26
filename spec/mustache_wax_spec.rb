@@ -18,4 +18,12 @@ describe "MustacheWax" do
     js_content.should =~ /^var mustache_templates = \{/
   end
   
+  it 'should generate an empty template if there are no mustache files' do
+    FileUtils.rm 'app/views/something/example.html.mustache'
+    MustacheWax.generate_templates
+    js_content = File.read('public/javascripts/mustache_templates.js')
+    
+    js_content.should == "var mustache_templates = {};"
+  end
+  
 end
