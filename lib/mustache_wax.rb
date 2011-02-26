@@ -3,6 +3,7 @@ require 'yajl'
 module MustacheWax
 
   autoload :Middleware, "mustache_wax/middleware"
+  autoload :Handler,    "mustache_wax/handler"
 
   def self.register_expansion(timestamp=nil)
     querystring = "?#{timestamp.to_i}" if timestamp
@@ -20,6 +21,7 @@ module MustacheWax
       initializer 'mustache_wax.initialize' do |app|
         MustacheWax.generate_templates
         MustacheWax.register_expansion
+        MustacheWax::Handler.register
         if Rails.env.development?
           app.config.middleware.use MustacheWax::Middleware
         end 
