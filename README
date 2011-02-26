@@ -1,6 +1,6 @@
 = mustache_wax
 
-Automatically compiles *.html.mustache view files in app/views to /javascripts/mustache_templates.js
+Automatically compiles *.html.mustache view files in app/views to /javascripts/mustache_templates.js so that you can easily access them from javascript.
 
 == Installation with bundler
 
