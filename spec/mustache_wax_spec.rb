@@ -11,7 +11,7 @@ describe "MustacheWax" do
   
   it 'should generate a mustache_templates.js from templates in app/views' do
     MustacheWax.generate_templates
-    File.read('public/javascripts/mustache_templates.js').should == %(window.MustacheTemplates = {\"something/example\":\"\\u003Cdiv\\u003E{{example}}\\u003C/div\\u003E\"};)
+    File.read('public/javascripts/mustache_templates.js').should == "window.MustacheTemplates = {\"something/example\":\"<div>{{example}}</div>\"};\n"
   end
   
 end
