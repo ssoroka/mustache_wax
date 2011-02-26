@@ -18,9 +18,8 @@ module MustacheWax
       include ActionView::TemplateHandlers::Compilable
     end
 
-    # def handles_encoding?; true; end
-
     def compile(template)
+      options = {}
       # template is a template object in Rails >=2.1.0,
       # a source string previously
       if template.respond_to? :source
@@ -31,8 +30,9 @@ module MustacheWax
         source = template
       end
 
-      # MustacheWax::Engine.new(source, options).send(:precompiled_with_ambles, [])
-      source
+      <<-CODE
+        Mustache.render("#{source}", assigns.merge(locals))
+      CODE
     end
 
     # In Rails 3.1+, #call takes the place of #compile
@@ -40,18 +40,12 @@ module MustacheWax
       new.compile(template)
     end
 
-    # def cache_fragment(block, name = {}, options = nil)
-    #   @view.fragment_for(block, name, options) do
-    #     eval("_hamlout.buffer", block.binding)
-    #   end
-    # end
-    
     def self.register
       if defined? ActionView::Template and ActionView::Template.respond_to? :register_template_handler
         ActionView::Template
       else
         ActionView::Base
-      end.register_template_handler(:haml, MustacheWax::Handler)
+      end.register_template_handler(:mustache, MustacheWax::Handler)
     end 
     
   end
